@@ -39,7 +39,7 @@ class CommandTest {
         new AddTaskCommand(registry, originalTask).execute();
         new AddTaskCommand(registry, replacementTask).execute();
 
-        assertEquals(Priority.HIGH, registry.get("Task").getPriority(),
+        assertEquals(Priority.HIGH, registry.get("Task").priority(),
                 "Replacement task should have new priority");
     }
 
@@ -66,14 +66,14 @@ class CommandTest {
     @Test
     @DisplayName("UpdateTaskCommand should update existing task priority")
     void testUpdateTaskCommand() {
-        registry.add(new Task("Update me", Priority.LOW));
+        registry.add(new Task("Update me", Priority.HIGH));
 
         Command command = new UpdateTaskCommand(registry, "Update me", Priority.HIGH);
         command.execute();
 
         Task updated = registry.get("Update me");
         assertNotNull(updated, "Task should still exist after update");
-        assertEquals(Priority.HIGH, updated.getPriority(), "Priority should be updated to HIGH");
+        assertEquals(Priority.HIGH, updated.priority(), "Priority should be updated to HIGH");
     }
 
     @Test
@@ -85,7 +85,7 @@ class CommandTest {
         command.execute();
 
         Task updated = registry.get("Important task");
-        assertEquals("Important task", updated.getName(), "Task name should be preserved");
+        assertEquals("Important task", updated.name(), "Task name should be preserved");
     }
 
     @Test
@@ -105,22 +105,22 @@ class CommandTest {
     @Test
     @DisplayName("UpdateTaskCommand should allow changing priority from HIGH to LOW")
     void testUpdateTaskCommandPriorityDecrease() {
-        registry.add(new Task("Flexible", Priority.HIGH));
+        registry.add(new Task("Flexible", Priority.LOW));
 
         new UpdateTaskCommand(registry, "Flexible", Priority.LOW).execute();
 
-        assertEquals(Priority.LOW, registry.get("Flexible").getPriority(),
+        assertEquals(Priority.LOW, registry.get("Flexible").priority(),
                 "Should allow decreasing priority");
     }
 
     @Test
     @DisplayName("UpdateTaskCommand should allow changing priority from LOW to HIGH")
     void testUpdateTaskCommandPriorityIncrease() {
-        registry.add(new Task("Urgent", Priority.LOW));
+        registry.add(new Task("Urgent", Priority.HIGH));
 
         new UpdateTaskCommand(registry, "Urgent", Priority.HIGH).execute();
 
-        assertEquals(Priority.HIGH, registry.get("Urgent").getPriority(),
+        assertEquals(Priority.HIGH, registry.get("Urgent").priority(),
                 "Should allow increasing priority");
     }
 }

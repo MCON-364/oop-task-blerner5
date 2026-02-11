@@ -1,6 +1,6 @@
 package edu.touro.las.mcon364.taskmanager;
 
-public class UpdateTaskCommand implements Command {
+public final class UpdateTaskCommand implements Command {
     private final TaskRegistry registry;
     private final String taskName;
     private final Priority newPriority;
@@ -22,7 +22,7 @@ public class UpdateTaskCommand implements Command {
         }
 
         // Create a new task with updated priority (tasks are immutable)
-        Task updated = new Task(existing.getName(), newPriority);
+        Task updated = new Task(existing.priority().toString(), newPriority);
         registry.add(updated);  // This replaces the old task
     }
 }

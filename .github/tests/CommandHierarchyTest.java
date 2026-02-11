@@ -13,7 +13,7 @@ class CommandHierarchyTest {
     @Test
     void knownCommandsMustBePermitted() {
         Set<String> permitted =
-                Arrays.stream(Command.class.getPermittedSubclasses())
+                Arrays.stream(Command.class.ermittedSubclasses())
                         .map(Class::getSimpleName)
                         .collect(Collectors.toSet());
 

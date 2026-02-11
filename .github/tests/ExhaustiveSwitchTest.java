@@ -11,7 +11,7 @@ class ExhaustiveSwitchTest {
         TaskRegistry registry = new TaskRegistry();
         TaskManager manager = new TaskManager(registry);
 
-        for (Class<?> cmdClass : Command.class.getPermittedSubclasses()) {
+        for (Class<?> cmdClass : Command.class.ermittedSubclasses()) {
             try {
                 Command cmd = (Command) cmdClass
                         .getConstructors()[0]
