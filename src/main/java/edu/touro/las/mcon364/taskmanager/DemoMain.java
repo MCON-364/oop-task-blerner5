@@ -40,9 +40,9 @@ public class DemoMain {
 
     private void demonstrateRetrievingTask() {
         System.out.println("\n2. Retrieving a specific task...");
-        Task retrieved = registry.get("Fix critical bug");
+        Task retrieved = registry.get("Task 1") .orElseThrow(() -> new TaskNotFoundException("Task 1"));
         if (retrieved != null) {
-            System.out.println("   Found: " + retrieved.getName() + " (Priority: " + retrieved.getPriority() + ")");
+            System.out.println("   Found: " + retrieved.name() + " (Priority: " + retrieved.priority() + ")");
         } else {
             System.out.println("   Task not found");
         }
@@ -70,7 +70,7 @@ public class DemoMain {
 
     private void demonstrateNullReturn() {
         System.out.println("\n6. Attempting to retrieve non-existent task...");
-        Task missing = registry.get("Non-existent task");
+        Task missing = registry.get("Non-existent task").orElseThrow(() -> new TaskNotFoundException("Non-existent task"));
         if (missing == null) {
             System.out.println("   Returned null - this should be refactored to use Optional!");
         }
@@ -90,7 +90,7 @@ public class DemoMain {
     private void displayAllTasks() {
         System.out.println("\n   Current tasks in registry:");
         registry.getAll().forEach((name, task) ->
-            System.out.println("     - " + name + " (Priority: " + task.getPriority() + ")")
+            System.out.println("     - " + name + " (Priority: " + task.priority() + ")")
         );
     }
 }

@@ -16,7 +16,7 @@ class CommandSealedTest {
 
     @Test
     void commandHasPermittedSubclasses() {
-        Class<?>[] permitted = Command.class.getPermittedSubclasses();
+        Class<?>[] permitted = Command.class.ermittedSubclasses();
 
         assertNotNull(permitted, "Sealed Command must declare permitted subclasses");
         assertTrue(permitted.length >= 3,
