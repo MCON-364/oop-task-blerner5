@@ -6,9 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Unit tests for TaskRegistry to verify behavior before and after refactoring.
- */
 class TaskRegistryTest {
     private TaskRegistry registry;
 
@@ -23,9 +20,8 @@ class TaskRegistryTest {
         Task task = new Task("Test task", Priority.HIGH);
         registry.add(task);
 
-        Task retrieved = registry.get("Test task");
-        assertNotNull(retrieved, "Added task should be retrievable");
-        assertEquals(task, retrieved, "Retrieved task should equal added task");
+        Task retrieved = registry.get("Test task").orElseThrow();
+        assertEquals(task, retrieved);
     }
 
     @Test
@@ -37,15 +33,14 @@ class TaskRegistryTest {
         registry.add(task1);
         registry.add(task2);
 
-        Task retrieved = registry.get("Test task");
-        assertEquals(Priority.HIGH, retrieved.priority(), "Second task should replace first");
+        Task retrieved = registry.get("Test task").orElseThrow();
+        assertEquals(Priority.HIGH, retrieved.priority());
     }
 
     @Test
-    @DisplayName("Getting non-existent task should return null")
+    @DisplayName("Getting non-existent task should return empty Optional")
     void testGetNonExistent() {
-        Task result = registry.get("Non-existent");
-        assertNull(result, "Non-existent task should return null (before Optional refactoring)");
+        assertTrue(registry.get("Non-existent").isEmpty());
     }
 
     @Test
@@ -56,14 +51,13 @@ class TaskRegistryTest {
 
         registry.remove("Test task");
 
-        assertNull(registry.get("Test task"), "Removed task should not be retrievable");
+        assertTrue(registry.get("Test task").isEmpty());
     }
 
     @Test
     @DisplayName("Removing non-existent task should not throw exception")
     void testRemoveNonExistent() {
-        assertDoesNotThrow(() -> registry.remove("Non-existent"),
-                "Removing non-existent task should not throw exception");
+        assertDoesNotThrow(() -> registry.remove("Non-existent"));
     }
 
     @Test
@@ -77,16 +71,15 @@ class TaskRegistryTest {
         registry.add(task2);
         registry.add(task3);
 
-        assertEquals(3, registry.getAll().size(), "getAll should return all 3 tasks");
-        assertTrue(registry.getAll().containsKey("Task 1"), "Should contain Task 1");
-        assertTrue(registry.getAll().containsKey("Task 2"), "Should contain Task 2");
-        assertTrue(registry.getAll().containsKey("Task 3"), "Should contain Task 3");
+        assertEquals(3, registry.getAll().size());
+        assertTrue(registry.getAll().containsKey("Task 1"));
+        assertTrue(registry.getAll().containsKey("Task 2"));
+        assertTrue(registry.getAll().containsKey("Task 3"));
     }
 
     @Test
     @DisplayName("getAll on empty registry should return empty map")
     void testGetAllEmpty() {
-        assertTrue(registry.getAll().isEmpty(), "Empty registry should return empty map");
+        assertTrue(registry.getAll().isEmpty());
     }
 }
-
